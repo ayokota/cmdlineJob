@@ -1,0 +1,9 @@
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001004 -f 1004_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001008 -f 1008_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001127 -f 1127_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001226 -f 1226_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001304 -f 1304_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001358 -f 1358_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001438 -f 1438_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001664 -f 1664_shipping.csv
+Java -jar EnterpriseShippingToolJobs.jar  -j 2 -dc 0001924 -f 1924_shipping.csv
