@@ -34,15 +34,23 @@ public class AutoShipDateJob {
 		try {
 			List<UnitInfoBean> unitInfoBeans = unitInfoDao.getAllUnitInfo();
 			
+			LocalTime currentTime = LocalTime.now();
+			LocalTime beforePickUpTime = currentTime.minusHours(2).minusMinutes(1);
+            LocalTime afterPickUpTime = currentTime.minusHours(2).minusMinutes(0);
+            
+//			System.out.println(currentTime.toString());
+//			System.out.println(beforePickUpTime.toString());
+//			System.out.println(afterPickUpTime.toString());
+
 			for(UnitInfoBean unitInfoBean: unitInfoBeans) {
-				processUnit(unitInfoBean);
+				processUnit(unitInfoBean, beforePickUpTime, afterPickUpTime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void processUnit (UnitInfoBean unitInfoBean) {
+	public void processUnit (UnitInfoBean unitInfoBean, LocalTime beforePickUpTime, LocalTime afterPickUpTime) {
 		System.out.println("processing dcunitid: " + unitInfoBean.getUnit_id());
 
 		try {
@@ -56,11 +64,11 @@ public class AutoShipDateJob {
 			nextShipDate = nextShipDayResponse.getShipDateResponseBody().getShipDate() ;
 			
             LocalTime pickUpTime = unitInfoDao.getUnitInfo(unitInfoBean.getUnit_id()).getPickup_time().toLocalTime();
-            LocalTime beforePickUpTime = pickUpTime.minusHours(2);
-            LocalTime afterPickUpTime = pickUpTime.plusHours(2);
-            LocalTime currentTime = LocalTime.now();
+//            LocalTime beforePickUpTime = pickUpTime.minusHours(2).minusMinutes(59);
+//            LocalTime afterPickUpTime = pickUpTime.minusHours(1).minusMinutes(59);
+//            LocalTime currentTime = LocalTime.now();
             
-            if(!currentTime.isBefore(beforePickUpTime) && !currentTime.isAfter(afterPickUpTime)) {
+            if(!pickUpTime.isBefore(beforePickUpTime) && !pickUpTime.isAfter(afterPickUpTime)) {
                 updateShipDate( unitInfoBean, nextShipDate);
             }
             
