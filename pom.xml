@@ -207,6 +207,11 @@
             <artifactId>jcommander</artifactId>
             <version>1.30</version>
         </dependency>
+        <dependency>
+			<groupId>com.shc.ecom.fastpromise</groupId>
+			<artifactId>FPSDataPersistence</artifactId>
+			<version>3.4</version>
+		</dependency>
     </dependencies>
 
 

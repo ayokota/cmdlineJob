@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.UnitInfoBean;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.NextShipDay.NextShipDayResponse;
 import com.shc.scinventory.enterpriseShippingToolJobs.Clients.ShipipngServiceClient;
+import com.shc.scinventory.enterpriseShippingToolJobs.Daos.ConfigurationDao;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.UnitInfoDao;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolConstants;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolUtil;
@@ -26,18 +27,25 @@ public class AutoShipDateJob {
 	@Autowired
 	ShipipngServiceClient shipipngServiceClient;
 	
+	@Autowired
+	ConfigurationDao configurationDao;
+	
+	
 	private static final String next_ship_date_req = "{ \"shipperCode\": \"?\" }";
 	
 	
 	public void run() {
 		System.out.println("Auto Ship Date job running" );
 		try {
-			List<UnitInfoBean> unitInfoBeans = unitInfoDao.getAllUnitInfo();
-			
+			int min = Integer.parseInt(configurationDao.getProperty("SHIPDATE_INTERVAL"));
 			LocalTime currentTime = LocalTime.now();
-			LocalTime beforePickUpTime = currentTime.minusHours(2).minusMinutes(1);
+						
+			LocalTime beforePickUpTime = currentTime.minusHours(2).minusMinutes(min);
             LocalTime afterPickUpTime = currentTime.minusHours(2).minusMinutes(0);
             
+			List<UnitInfoBean> unitInfoBeans = unitInfoDao.getAllUnitInfo();
+
+//			System.out.println(min);
 //			System.out.println(currentTime.toString());
 //			System.out.println(beforePickUpTime.toString());
 //			System.out.println(afterPickUpTime.toString());

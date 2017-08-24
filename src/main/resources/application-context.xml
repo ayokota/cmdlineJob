@@ -60,7 +60,7 @@
     <!--====================================================================-->
          <!--Application beans-->
     <!--====================================================================-->
-    <context:component-scan base-package="com.shc.scinventory.enterpriseShippingToolJobs"/>
+    <context:component-scan base-package="com.shc.scinventory.enterpriseShippingToolJobs , com.shc.ecom"/>
 
     <bean id="JobsHandler" class="com.shc.scinventory.enterpriseShippingToolJobs.Handlers.JobsHandler"/>
 

@@ -192,4 +192,25 @@ public class UnitInfoDao {
         }
         return ship_date;
     }
+    
+    private static final String updatePickupTimeSql =
+            "UPDATE unit_info\n" +
+                    "SET\n" +
+                    "pickup_time = ?\n " +
+                    "WHERE unit_id = ?";
+    
+    
+    public void updatePickupTime(String pickupTime, String dcUnitId) {
+        try {
+            jdbcTemplate.update(updatePickupTimeSql,
+            		pickupTime,
+            		dcUnitId
+            );
+        } catch (Exception e) {
+            LOG.error("An error has occured in insert method with error msg: " + e.getMessage()
+                    + "\nWith dcUnitId: " + dcUnitId
+                    + "\n& pickupTime: " + pickupTime, e);
+            e.printStackTrace();
+        }
+    }
 }
