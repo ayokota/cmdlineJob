@@ -53,7 +53,6 @@ public class AutoShipDateJob {
 //			System.out.println(afterPickUpTime.toString());
 
 			for(UnitInfoBean unitInfoBean: unitInfoBeans) {
-				LOG.error("processing : " +  unitInfoBean.getUnit_id());
 
 				processUnit(unitInfoBean, beforePickUpTime, afterPickUpTime);
 			}
@@ -82,6 +81,8 @@ public class AutoShipDateJob {
 //            LocalTime currentTime = LocalTime.now();
             
             if(!pickUpTime.isBefore(beforePickUpTime) && !pickUpTime.isAfter(afterPickUpTime)) {
+				LOG.error("updating : " +  unitInfoBean.getUnit_id());
+
                 updateShipDate( unitInfoBean, nextShipDate);
             }
             
