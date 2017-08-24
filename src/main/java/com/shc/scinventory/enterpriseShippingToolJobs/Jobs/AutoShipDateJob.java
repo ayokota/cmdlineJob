@@ -55,6 +55,7 @@ public class AutoShipDateJob {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOG.error("An exception has occred in run method for auto ship date job with msg " + e.getMessage(), e);
 		}
 	}
 	
@@ -82,6 +83,8 @@ public class AutoShipDateJob {
             
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOG.error("An exception has occred in processUnit with msg " + e.getMessage(), e);
+
 		}
 	}
 	
@@ -94,6 +97,8 @@ public class AutoShipDateJob {
             
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOG.error("An exception has occred in updateShipDate with msg " + e.getMessage(), e);
+
 		}
 	}
 		
