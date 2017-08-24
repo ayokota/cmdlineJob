@@ -88,7 +88,7 @@ public class AutoShipDateJob {
             
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("An exception has occred in processUnit with msg " + e.getMessage(), e);
+			LOG.error("An exception has occred in processUnit with msg " + e.getMessage() + " for unit : " + unitInfoBean.getUnit_id(), e);
 
 		}
 	}
@@ -102,7 +102,7 @@ public class AutoShipDateJob {
             
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("An exception has occred in updateShipDate with msg " + e.getMessage(), e);
+			LOG.error("An exception has occred in updateShipDate with msg " + e.getMessage() + unitInfoBean.getUnit_id(), e);
 
 		}
 	}
