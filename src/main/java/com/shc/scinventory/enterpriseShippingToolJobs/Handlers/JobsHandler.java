@@ -33,20 +33,21 @@ public class JobsHandler {
 	}
 	
 	public void executeJob (MainCommandLineParser mainCommandLineParser) {
-		if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.REFRESH_NEXT_SHIP_DATE) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.REFRESH_NEXT_SHIP_DATE_NUM)){
-			refreshNextShipDateJob.run(mainCommandLineParser.getFile());
-		} 
-		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPLOAD_HISTORY) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPLOAD_HISTORY_NUM)){
-			uploadHistoryJob.run(mainCommandLineParser.getFile());
-		}
-		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.AUTO_SHIPDATE) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.AUTO_SHIPDATE_NUM)){
-			autoShipDateJob.run();
-		}
-		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME_NUM)){
-			updatePickupTimejob.run(mainCommandLineParser.getFile());
-		}
-		else {
-			System.out.println(mainCommandLineParser.getJob() + " is not found ");
-		}
+//		if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.REFRESH_NEXT_SHIP_DATE) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.REFRESH_NEXT_SHIP_DATE_NUM)){
+//			refreshNextShipDateJob.run(mainCommandLineParser.getFile());
+//		} 
+//		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPLOAD_HISTORY) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPLOAD_HISTORY_NUM)){
+//			uploadHistoryJob.run(mainCommandLineParser.getFile());
+//		}
+//		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.AUTO_SHIPDATE) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.AUTO_SHIPDATE_NUM)){
+//			autoShipDateJob.run();
+//		}
+//		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME_NUM)){
+//			updatePickupTimejob.run(mainCommandLineParser.getFile());
+//		}
+//		else {
+//			System.out.println(mainCommandLineParser.getJob() + " is not found ");
+//		}
+		autoShipDateJob.run();
 	}
 }
