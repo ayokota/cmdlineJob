@@ -36,6 +36,8 @@ public class AutoShipDateJob {
 	
 	public void run() {
 		System.out.println("Auto Ship Date job running" );
+		LOG.error("Auto Ship Date job running" );
+
 		try {
 			int min = Integer.parseInt(configurationDao.getProperty("SHIPDATE_INTERVAL"));
 			LocalTime currentTime = LocalTime.now();
@@ -51,6 +53,8 @@ public class AutoShipDateJob {
 //			System.out.println(afterPickUpTime.toString());
 
 			for(UnitInfoBean unitInfoBean: unitInfoBeans) {
+				LOG.error("processing : " +  unitInfoBean.getUnit_id());
+
 				processUnit(unitInfoBean, beforePickUpTime, afterPickUpTime);
 			}
 		} catch (Exception e) {
