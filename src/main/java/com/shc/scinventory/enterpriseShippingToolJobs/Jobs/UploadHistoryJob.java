@@ -22,7 +22,7 @@ public class UploadHistoryJob {
 	@Autowired
 	PackageInfoDao packageInfoDao;
 	
-	public void run(String file) {
+	public void run(String file, String store) {
 
 		if(file==null || file.isEmpty()) {
 			System.out.println("Please provide a file of history record");
@@ -34,7 +34,7 @@ public class UploadHistoryJob {
 		try {
 			String content = FileReader.readResource(file);
 			List<String> lines = ListUtils.rawToList(content);
-			List<PackageInfoBean> beans = createBeans(lines);
+			List<PackageInfoBean> beans = createBeans(lines, store);
 			
 			packageInfoDao.insertPackageInfo(beans);
 			//packageInfoDao.updatePackageInfo(beans);
@@ -43,7 +43,7 @@ public class UploadHistoryJob {
 		}
 	}
 	
-	public List<PackageInfoBean> createBeans (List<String> lines) {
+	public List<PackageInfoBean> createBeans (List<String> lines, String store) {
 		List<PackageInfoBean> beans = new LinkedList<PackageInfoBean>();
 		
 		try {

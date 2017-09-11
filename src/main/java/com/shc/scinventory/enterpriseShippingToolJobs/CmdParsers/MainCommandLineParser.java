@@ -9,6 +9,9 @@ public class MainCommandLineParser {
 	@Parameter(names = { "-f", "-file" }, required = false, description = "file")
 	private String file ;
 	
+	@Parameter(names = { "-s", "-store" }, required = false, description = "store")
+	private String store = "sears" ;
+	
 	public String getJob() {
 		return job;
 	}
@@ -24,4 +27,14 @@ public class MainCommandLineParser {
 	public void setFile(String file) {
 		this.file = file;
 	}
+
+	public String getStore() {
+		return store;
+	}
+
+	public void setStore(String store) {
+		this.store = store;
+	}
+	
+	
 }

@@ -16,5 +16,9 @@ public class EnterpriseShippingToolConstants {
 	public final static String NEXT_SHIP_DATE_API = "nextShipDate";
 	
 	public final static String SHIPDATE_INTERVAL = "SHIPDATE_INTERVAL";
+	
+	public final static String SEARS = "sears";
+	public final static String KMART = "kmart";
+
 
 }

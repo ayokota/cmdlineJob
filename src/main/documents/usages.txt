@@ -1,2 +1,4 @@
 -j 1 -f test.csv
--j 2 -dc 0001327 -f 1327_shipping.csv
+-j 2 -f searsHistory.txt -s sears
+-j 3  
+-j 4 -f pickupTime.txt
