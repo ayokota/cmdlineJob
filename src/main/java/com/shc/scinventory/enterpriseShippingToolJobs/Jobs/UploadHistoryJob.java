@@ -13,7 +13,6 @@ import com.shc.scinventory.enterpriseShippingToolJobs.Beans.PackageInfoBean;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.PackageInfoDao;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolUtil;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.FileReader;
-import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.JSONSerializer;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.ListUtils;
 
 @Component

@@ -13,6 +13,9 @@ public class EnterpriseShippingToolConstants {
 	public final static String UPDATE_PICKUP_TIME = "udpte_pickup_time";
 	public final static String UPDATE_PICKUP_TIME_NUM = "4";
 	
+	public final static String BOX_ASSORTMENT_ALERT = "box_assortment_alert";
+	public final static String BOX_ASSORTMENT_ALERT_NUM = "5";
+	
 	public final static String NEXT_SHIP_DATE_API = "nextShipDate";
 	
 	public final static String SHIPDATE_INTERVAL = "SHIPDATE_INTERVAL";

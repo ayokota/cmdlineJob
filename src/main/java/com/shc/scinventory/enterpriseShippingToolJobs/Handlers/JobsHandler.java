@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.CmdParsers.MainCommandLineParser;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.RefreshNextShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UpdatePickupTimeJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UploadHistoryJob;
@@ -28,6 +29,9 @@ public class JobsHandler {
 	@Autowired
 	UpdatePickupTimeJob updatePickupTimejob;
 	
+	@Autowired
+	BoxAssortmentAlertJob boxAssortmentAlertJob;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -44,6 +48,9 @@ public class JobsHandler {
 		}
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPDATE_PICKUP_TIME_NUM)){
 			updatePickupTimejob.run(mainCommandLineParser.getFile());
+		}
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.BOX_ASSORTMENT_ALERT) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.BOX_ASSORTMENT_ALERT_NUM)){
+			boxAssortmentAlertJob.run();
 		}
 		else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");

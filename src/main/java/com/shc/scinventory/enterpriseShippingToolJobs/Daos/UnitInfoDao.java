@@ -213,4 +213,18 @@ public class UnitInfoDao {
             e.printStackTrace();
         }
     }
+    
+    private final String getDcListQuery =
+            "select unit_id from unit_info";
+
+    public List<String> getListOfDcs() {
+        List<String> dcList = null;
+        try {
+            dcList =
+                    jdbcTemplate.queryForList (getDcListQuery, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dcList;
+    }
 }

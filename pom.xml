@@ -212,6 +212,12 @@
 			<artifactId>FPSDataPersistence</artifactId>
 			<version>3.4</version>
 		</dependency>
+		<!-- Email -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.4</version>
+        </dependency>
     </dependencies>
 
 

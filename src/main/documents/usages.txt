@@ -2,3 +2,4 @@
 -j 2 -f searsHistory.txt -s sears
 -j 3  
 -j 4 -f pickupTime.txt
+-j 5

@@ -57,6 +57,15 @@
         <constructor-arg ref="dataSource" />
     </bean>
 
+    <!--===========================-->
+    <!--SMTP eMail -->
+    <!--===========================-->    
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${bpt.smtp.host}"/>
+        <property name="port" value="${bpt.smtp.port}"/>
+    </bean>
+
+
     <!--====================================================================-->
          <!--Application beans-->
     <!--====================================================================-->
