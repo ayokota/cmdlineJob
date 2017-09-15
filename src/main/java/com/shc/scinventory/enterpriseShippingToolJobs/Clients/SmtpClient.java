@@ -2,9 +2,12 @@ package com.shc.scinventory.enterpriseShippingToolJobs.Clients;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailParseException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -81,6 +84,29 @@ public class SmtpClient {
 	      LOG.error(e);
 	    }
 	  }
+  
+  @Autowired
+	private JavaMailSender javaMailSender;
+
+  public void sendFile (String msg, String receiver, String title, String fileName) {
+	   MimeMessage message = javaMailSender.createMimeMessage();
+
+	   try{
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	
+			helper.setFrom("ESOC@searshc.com");
+			helper.setTo(receiver);
+			helper.setSubject(title);
+			helper.setText(msg);
+	
+			FileSystemResource file = new FileSystemResource(fileName);
+			helper.addAttachment(file.getFilename(), file);
+
+	   }catch (MessagingException e) {
+	    	 throw new MailParseException(e);
+	   }
+	   javaMailSender.send(message);
+  }
 
   // Derive email alerts from change results
   public void sendLogMessage(String dcUnitId, String body) throws MessagingException {

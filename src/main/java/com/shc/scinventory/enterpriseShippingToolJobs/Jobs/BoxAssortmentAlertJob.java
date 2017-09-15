@@ -1,10 +1,18 @@
 package com.shc.scinventory.enterpriseShippingToolJobs.Jobs;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -42,9 +50,11 @@ public class BoxAssortmentAlertJob {
 
 		try {			
 			Map<String, Map<String, Boolean> > boxAssortmentData = gatherBoxAssortmentData ();
-			processSearsBoxAssortment(boxAssortmentData);
-			processKmartBoxAssortment(boxAssortmentData);
-
+			List<String> boxTypes = extractBoxType (boxAssortmentData);
+//			System.out.println(JSONSerializer.serialize(boxTypes));
+//			processSearsBoxAssortment(boxAssortmentData);
+//			processKmartBoxAssortment(boxAssortmentData);
+			sendSearsSpreadSheet (boxAssortmentData, boxTypes);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.error("An exception has occred in run method for auto ship date job with msg " + e.getMessage(), e);
@@ -122,5 +132,125 @@ public class BoxAssortmentAlertJob {
     	} catch (Exception e) {
 			LOG.error("An exception has occred in processKmartBoxAssortment with msg " + e.getMessage(), e);
     	}
+    }
+    
+    public void sendSearsSpreadSheet (Map<String, Map<String, Boolean> > boxAssortmentData, List<String> boxTypes) {
+    	try {
+    		XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet("Sears Box Assortments");
+            int rowNum = 0;
+
+			Row row = sheet.createRow(rowNum++);
+            int colNum = 0;
+            Cell cell = row.createCell(colNum++);
+			for(String boxId : boxTypes) {
+                cell = row.createCell(colNum++);
+                cell.setCellValue( (String) boxId );
+
+			}
+    		
+    		for (String dcUnitId : boxAssortmentData.keySet()) {
+                
+    			if(dcUnitId.length()==7) {
+    				row = sheet.createRow(rowNum++);
+                    colNum = 0;
+	                cell = row.createCell(colNum++);
+	                cell.setCellValue( (String) dcUnitId );
+	    			for(String boxId : boxTypes) {
+	                    cell = row.createCell(colNum++);
+	                    if(boxAssortmentData.get(dcUnitId).containsKey(boxId)) {
+	                    	cell.setCellValue( (String) boxAssortmentData.get(dcUnitId).get(boxId).toString() );
+	                    } else {
+	                    	cell.setCellValue( (String) "N/A" );
+	                    }
+
+	    			}
+    			}
+    		}
+    		String fileName = "searsAssprt.xlsx";
+    		try {
+                FileOutputStream outputStream = new FileOutputStream(fileName);
+                workbook.write(outputStream);
+                workbook.close();
+        		for(String email : ListUtils.lineToList(searsEmailList, ",")) {
+	                smtpClient.sendFile("Sears stores monthly box assortment in attachment.", email, "Sears Box Assortment", fileName);
+        		}
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    	} catch (Exception e) {
+			LOG.error("An exception has occred in sendSearsSpreadSheet with msg " + e.getMessage(), e);
+    	}
+    }
+    
+    public void sendKmartSpreadSheet (Map<String, Map<String, Boolean> > boxAssortmentData, List<String> boxTypes) {
+    	try {
+    		XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet("Sears Box Assortments");
+            int rowNum = 0;
+
+			Row row = sheet.createRow(rowNum++);
+            int colNum = 0;
+            Cell cell = row.createCell(colNum++);
+			for(String boxId : boxTypes) {
+                cell = row.createCell(colNum++);
+                cell.setCellValue( (String) boxId );
+
+			}
+    		
+    		for (String dcUnitId : boxAssortmentData.keySet()) {
+                
+    			if(dcUnitId.length()==4) {
+    				row = sheet.createRow(rowNum++);
+                    colNum = 0;
+	                cell = row.createCell(colNum++);
+	                cell.setCellValue( (String) dcUnitId );
+	    			for(String boxId : boxTypes) {
+	                    cell = row.createCell(colNum++);
+	                    if(boxAssortmentData.get(dcUnitId).containsKey(boxId)) {
+	                    	cell.setCellValue( (String) boxAssortmentData.get(dcUnitId).get(boxId).toString() );
+	                    } else {
+	                    	cell.setCellValue( (String) "N/A" );
+	                    }
+
+	    			}
+    			}
+    		}
+    		String fileName = "kmartAssprt.xlsx";
+    		try {
+                FileOutputStream outputStream = new FileOutputStream(fileName);
+                workbook.write(outputStream);
+                workbook.close();
+        		for(String email : ListUtils.lineToList(kmartEmailList, ",")) {
+	                smtpClient.sendFile("Kmart stores monthly box assortment in attachment.", email, "Kmart Box Assortment", fileName);
+        		}
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    	} catch (Exception e) {
+			LOG.error("An exception has occred in sendKmartSpreadSheet with msg " + e.getMessage(), e);
+    	}
+    }
+    
+    public List<String> extractBoxType (Map<String, Map<String, Boolean> > boxAssortmentData) {
+    	List<String> boxTypes = new LinkedList<String>();
+    	try {
+    		for (String dcUnitId : boxAssortmentData.keySet()) {
+    			if(dcUnitId.length()==7) {
+    				for(String boxId : boxAssortmentData.get(dcUnitId).keySet()) {
+    					if(!boxTypes.contains(boxId)) {
+    						boxTypes.add(boxId);
+    					}
+    				}
+    			}
+    		}
+    	} catch (Exception e) {
+			LOG.error("An exception has occred in extractBoxType with msg " + e.getMessage(), e);
+    	}
+    	return boxTypes;
     }
 }
