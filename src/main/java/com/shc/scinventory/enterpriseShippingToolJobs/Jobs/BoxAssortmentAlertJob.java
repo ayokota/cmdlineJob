@@ -55,6 +55,8 @@ public class BoxAssortmentAlertJob {
 //			processSearsBoxAssortment(boxAssortmentData);
 //			processKmartBoxAssortment(boxAssortmentData);
 			sendSearsSpreadSheet (boxAssortmentData, boxTypes);
+			sendKmartSpreadSheet (boxAssortmentData, boxTypes);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.error("An exception has occred in run method for auto ship date job with msg " + e.getMessage(), e);
