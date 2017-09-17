@@ -1,0 +1,10 @@
+
+//update ship date for DC units
+Java -jar EnterpriseShippingToolJobs.jar -j 3
+
+//upload adhoc shipping address book. file name is hard coded
+Java -jar EnterpriseShippingToolJobs.jar -j 6
+
+//upload history for dc units
+Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s sears
+Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s kmart

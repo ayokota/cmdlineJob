@@ -57,6 +57,17 @@ public class EnterpriseShippingToolUtil {
         return dt;
     }
     
+    public static Date stringToDateWithFormat(String date, String format) {
+        Date dt = null;
+        try {
+        	SimpleDateFormat customFormat = new SimpleDateFormat(format);
+            dt = new java.sql.Date( customFormat.parse(date).getTime());
+        } catch (Exception e ) {
+        	e.printStackTrace();
+        }
+        return dt;
+    }
+    
     public static String getShipperCode (String dcUnitId) {
     	String dcId = editLength(dcUnitId,'0', 4);
 		if(dcUnitId!= null) {
@@ -66,5 +77,19 @@ public class EnterpriseShippingToolUtil {
 				return "K"+ dcId;
 		}
 		return null;
+    }
+    
+    public static String convertShipperCodeToDcUnits (String shipperCode) {
+    	String dcUnits = "";
+    	if(shipperCode.startsWith("D")) {
+    		dcUnits = editLength(  shipperCode.substring(2)   , '0', 7 );
+    	} else if (shipperCode.startsWith("K")) {
+    		dcUnits = shipperCode.substring(1);
+    	} else if (shipperCode.equals("Sears")) {
+    		dcUnits = "SHC";
+    	} else {
+    		System.out.println("Unknown shipper code : " + shipperCode);
+    	}
+    	return dcUnits;
     }
 }

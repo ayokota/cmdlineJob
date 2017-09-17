@@ -1,5 +1,6 @@
 package com.shc.scinventory.enterpriseShippingToolJobs.Utilities;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,4 +44,19 @@ public class ListUtils {
 
         return result;
     }
+    
+    public static List<String> csvToList(String line) {
+        List<String> result = new LinkedList<String>();
+
+        try {
+
+        	result = Arrays.asList(line.split("\\s*,\\s*"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
