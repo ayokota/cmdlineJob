@@ -22,6 +22,9 @@ public class EnterpriseShippingToolConstants {
 	public final static String UPLOAD_HISTORY_V2 = "update_history_v2";
 	public final static String UPLOAD_HISTORY_V2_NUM = "7";
 	
+	public final static String DCUNIT_INFO = "dcunit_info";
+	public final static String DCUNIT_INFO_NUM = "8";
+	
 	public final static String NEXT_SHIP_DATE_API = "nextShipDate";
 	
 	public final static String SHIPDATE_INTERVAL = "SHIPDATE_INTERVAL";

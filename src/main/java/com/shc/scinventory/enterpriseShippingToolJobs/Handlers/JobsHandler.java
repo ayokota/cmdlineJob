@@ -8,6 +8,7 @@ import com.shc.scinventory.enterpriseShippingToolJobs.CmdParsers.MainCommandLine
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocUploadJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DcUnitInfoJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.RefreshNextShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UpdatePickupTimeJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UploadHistoryJob;
@@ -40,6 +41,9 @@ public class JobsHandler {
 	@Autowired
 	UploadHistoryJobV2 uploadHistoryJobV2;
 	
+	@Autowired
+	DcUnitInfoJob dcUnitInfoJob;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -66,7 +70,9 @@ public class JobsHandler {
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPLOAD_HISTORY_V2) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPLOAD_HISTORY_V2_NUM)){
 			uploadHistoryJobV2.run(mainCommandLineParser.getFile(), mainCommandLineParser.getStore());
 		}
-		else {
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.DCUNIT_INFO) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.DCUNIT_INFO_NUM)){
+			dcUnitInfoJob.run();
+		} else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");
 		}
 		//autoShipDateJob.run();

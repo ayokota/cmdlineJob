@@ -134,7 +134,7 @@ public class UploadHistoryJobV2 {
 				case "2nd Day Air":
 					convertedShipode = "SD";
 					break;
-				case "":
+				case "Next Day":
 					convertedShipode = "ND";
 					break;
 				default:

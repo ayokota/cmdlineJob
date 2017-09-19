@@ -1,6 +1,15 @@
+//update new stores's update ship date   [needed for initialization]
+Java -jar EnterpriseShippingToolJobs.jar -j 1 -f pickupTime.txt
+
 
 //update ship date for DC units
 Java -jar EnterpriseShippingToolJobs.jar -j 3
+
+//update pick up time for all units.   [needed for initialization]
+Java -jar EnterpriseShippingToolJobs.jar -j 4 -f pickupTime.txt
+
+//send box alert email
+Java -jar EnterpriseShippingToolJobs.jar -j 5
 
 //upload adhoc shipping address book. file name is hard coded
 Java -jar EnterpriseShippingToolJobs.jar -j 6
