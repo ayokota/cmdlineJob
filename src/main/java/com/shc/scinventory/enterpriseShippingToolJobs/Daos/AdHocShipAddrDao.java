@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.AdhocAddressBean;
+import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.JSONSerializer;
 
 @Component
 public class AdHocShipAddrDao {
@@ -76,8 +77,8 @@ public class AdHocShipAddrDao {
                         adhocShipAddrBean.getDcUnitId()
                 );
             } catch (Exception e) {
-
-                e.printStackTrace();
+              	System.out.println(JSONSerializer.serialize(adhocShipAddrBean));
+            	System.out.println(e.getMessage());
             }
         }
 
