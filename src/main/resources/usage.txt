@@ -16,4 +16,4 @@ Java -jar EnterpriseShippingToolJobs.jar -j 6
 
 //upload history for dc units
 Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s sears
-Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s kmart
+Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/kmart.csv -s kmart
