@@ -68,14 +68,16 @@ public class RefreshNextShipDateJob {
 			/* if database has no record */
 			if(!unitInfoDao.getUnitInfoCache().containsKey(dcUnitId)) {
 				UnitInfoBean unitInfoBean = new UnitInfoBean(dcUnitId);
-				unitInfoBean.setShip_date(EnterpriseShippingToolUtil.dateToString(nextShipDate));
+				//unitInfoBean.setShip_date(EnterpriseShippingToolUtil.dateToString(nextShipDate));
+				unitInfoBean.setShip_date(EnterpriseShippingToolUtil.dateToString("09-20-2017"));
 				unitInfoBean.setType_of_update("Initialization");
 				unitInfoDao.insert(unitInfoBean);
 			}
 			/* if database has record */
-//			else {
-//				unitInfoDao.updateShipDate(dcUnitId, EnterpriseShippingToolUtil.dateToString(nextShipDate));
-//			}
+			else {
+				//unitInfoDao.updateShipDate(dcUnitId, EnterpriseShippingToolUtil.dateToString(nextShipDate));
+				unitInfoDao.updateShipDate(dcUnitId, EnterpriseShippingToolUtil.dateToString("09-20-2017"));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
