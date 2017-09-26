@@ -51,8 +51,18 @@ public class UploadHistoryJobV2 {
 //				System.out.println(JSONSerializer.serialize(packageInfoBean));
 //			}
 			
-			
-			packageInfoDao.insertPackageInfo(beans);
+//			try {
+//				packageInfoDao.insertPackageInfo(beans);
+//			} catch ()
+			for(PackageInfoBean bean : beans) {
+				List<PackageInfoBean> newList = new LinkedList<PackageInfoBean>();
+				newList.add(bean);
+				try {
+					packageInfoDao.insertPackageInfo(newList);
+				}catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
