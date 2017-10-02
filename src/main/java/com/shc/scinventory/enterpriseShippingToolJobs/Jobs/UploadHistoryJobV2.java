@@ -104,7 +104,8 @@ public class UploadHistoryJobV2 {
 				//bean.setShipped_date(EnterpriseShippingToolUtil.stringToDate(cols.get(2).substring(0, 10)));
 				
 				if(storeType.equalsIgnoreCase("sears")) {
-					bean.setShipped_date(EnterpriseShippingToolUtil.stringToDateWithFormat(cols.get(2), "yyyy-MM-dd"));
+					//bean.setShipped_date(EnterpriseShippingToolUtil.stringToDateWithFormat(cols.get(2), "yyyy-MM-dd"));
+					bean.setShipped_date(EnterpriseShippingToolUtil.stringToDateWithFormat(cols.get(2), "MM/dd/yy"));
 				} else if (storeType.equalsIgnoreCase("kmart")) {
 					bean.setShipped_date(EnterpriseShippingToolUtil.stringToDateWithFormat(cols.get(2), "MM/dd/yyyy"));
 				}
