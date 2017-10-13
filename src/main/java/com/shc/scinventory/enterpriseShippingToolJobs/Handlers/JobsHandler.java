@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.CmdParsers.MainCommandLineParser;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocHistoryUpload;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocUploadJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
@@ -44,6 +45,9 @@ public class JobsHandler {
 	@Autowired
 	DcUnitInfoJob dcUnitInfoJob;
 	
+	@Autowired
+	AdHocHistoryUpload adHistoryUpload;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -72,7 +76,10 @@ public class JobsHandler {
 		}
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.DCUNIT_INFO) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.DCUNIT_INFO_NUM)){
 			dcUnitInfoJob.run();
-		} else {
+		} 
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.ADHOC_HISTORY_UPLOAD) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.ADHOC_HISTORY_UPLOAD_NUM)){
+			adHistoryUpload.run();
+		}else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");
 		}
 		//autoShipDateJob.run();
