@@ -68,15 +68,19 @@ public class AutoManifest {
 			
 			LOG.debug(manifestRequest);
 			
-			System.out.println("manifesting unit: " + unit_id);
+			//System.out.println("manifesting unit: " + unit_id);
 			String response = shipipngServiceClient.postAPI(JSONSerializer.serialize(manifestRequest), 
 					EnterpriseShippingToolConstants.MANIFEST_API);
-			System.out.println(response);
+			//System.out.println(response);
 			
 			LOG.debug(response);
 
 
 			ManifestResponse manifestResponse = JSONSerializer.deserialize(response, ManifestResponse.class);
+			
+			if(!manifestResponse.getResponseHeader().getReturnCode().equals("0"))
+				return;
+			
 			List<String> trackingNums = new LinkedList<String> ();
 			for(ProcessedPackageResult result: manifestResponse.getProcessedPackagesResponseBody().getResults()) {
 				for(PackageInfo packageInfo : result.getPackageInfo()) {
@@ -87,7 +91,7 @@ public class AutoManifest {
 
 			AuditBean auditBean = new AuditBean();
 			auditBean.setDcUnitId(unit_id);
-			auditBean.setEventType("Manifest");
+			auditBean.setEventType("Batch");
 			auditBean.setWorkFlow("Auto Manifest");
 			auditBean.setUserId("JBoss");
 			auditBean.setMsg("Auto Manifest triggered. Number of packages: " + trackingNums.size());
