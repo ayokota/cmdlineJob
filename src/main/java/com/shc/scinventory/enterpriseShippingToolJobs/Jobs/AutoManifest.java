@@ -9,14 +9,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.shc.scinventory.enterpriseShippingToolJobs.Beans.AuditBean;
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.UnitInfoBean;
-import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.EST_updateKmartToShipped.EST_updateKmartToShippedRequest;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.ManifestResponse;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.PackageInfo;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.ProcessedPackageResult;
 import com.shc.scinventory.enterpriseShippingToolJobs.Clients.ShipipngServiceClient;
 import com.shc.scinventory.enterpriseShippingToolJobs.Clients.ShippingToolClient;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.AuditDao;
+import com.shc.scinventory.enterpriseShippingToolJobs.Daos.AuditDaoImpl;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.PackageInfoDao;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.UnitInfoDao;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolConstants;
@@ -26,7 +27,8 @@ import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.JSONSerializer;
 @Component
 public class AutoManifest {
     private static final Logger LOG = Logger.getLogger(AutoManifest.class);
-    
+    private static final Logger MANIFEST_LOGGER = Logger.getLogger("manifestLogger");
+
     @Autowired
     PackageInfoDao packageInfoDao;
     
@@ -41,6 +43,9 @@ public class AutoManifest {
     
     @Autowired 
     UnitInfoDao unitInfoDao;
+    
+    @Autowired
+    AuditDaoImpl auditDaoImpl;
     
 	public void run() {
 		System.out.println("AutoManifest job processor");
@@ -61,12 +66,15 @@ public class AutoManifest {
 			Map<String, String> manifestRequest = new HashMap<String, String> ();
 			manifestRequest.put("shipperCode", EnterpriseShippingToolUtil.getShipperCode(unit_id));
 			
-			
+			LOG.debug(manifestRequest);
 			
 			System.out.println("manifesting unit: " + unit_id);
 			String response = shipipngServiceClient.postAPI(JSONSerializer.serialize(manifestRequest), 
 					EnterpriseShippingToolConstants.MANIFEST_API);
 			System.out.println(response);
+			
+			LOG.debug(response);
+
 
 			ManifestResponse manifestResponse = JSONSerializer.deserialize(response, ManifestResponse.class);
 			List<String> trackingNums = new LinkedList<String> ();
@@ -75,7 +83,17 @@ public class AutoManifest {
 					trackingNums.add(packageInfo.getTrackingNum());
 				}
 			}
+			MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
 
+			AuditBean auditBean = new AuditBean();
+			auditBean.setDcUnitId(unit_id);
+			auditBean.setEventType("Manifest");
+			auditBean.setWorkFlow("Auto Manifest");
+			auditBean.setUserId("JBoss");
+			auditBean.setMsg("Auto Manifest triggered. Number of packages: " + trackingNums.size());
+			
+			auditDaoImpl.insertInstance(auditBean);
+			
 		} catch (Exception e) {
 			LOG.error("Error processing auto manifest for dc: " + unit_id + " with error: " + e.getMessage());
 

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.shc.scinventory.enterpriseShippingToolJobs.Exception.ShippingToolException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
@@ -45,8 +46,7 @@ public class ShipipngServiceClient {
                     .accept(MediaType.APPLICATION_JSON)
                     .post(String.class, request);
         } catch (Exception e) {
-        	e.printStackTrace();
-            LOG.error("An error has occured in post method: " + API + " with error msg: " + e.getMessage(), e);
+        	throw new ShippingToolException(e.getMessage());
         }
         return response;
     }
