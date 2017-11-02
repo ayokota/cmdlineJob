@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.shc.scinventory.enterpriseShippingToolJobs.CmdParsers.MainCommandLineParser;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocHistoryUpload;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocUploadJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoManifest;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DcUnitInfoJob;
@@ -48,6 +49,9 @@ public class JobsHandler {
 	@Autowired
 	AdHocHistoryUpload adHistoryUpload;
 	
+	@Autowired
+	AutoManifest autoManifest;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -79,6 +83,9 @@ public class JobsHandler {
 		} 
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.ADHOC_HISTORY_UPLOAD) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.ADHOC_HISTORY_UPLOAD_NUM)){
 			adHistoryUpload.run();
+		}		
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.AUTO_MANIFEST) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.AUTO_MANIFEST_NUM)){
+			autoManifest.run();
 		}else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");
 		}

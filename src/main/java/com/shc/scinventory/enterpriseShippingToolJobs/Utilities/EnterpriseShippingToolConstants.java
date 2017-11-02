@@ -28,7 +28,12 @@ public class EnterpriseShippingToolConstants {
 	public final static String ADHOC_HISTORY_UPLOAD = "adhoc_history_upload";
 	public final static String ADHOC_HISTORY_UPLOAD_NUM = "9";
 	
+	public final static String AUTO_MANIFEST = "auto_manifest";
+	public final static String AUTO_MANIFEST_NUM = "10";
+	
 	public final static String NEXT_SHIP_DATE_API = "nextShipDate";
+	public final static String MANIFEST_API = "triggerManifestProcessing";
+
 	
 	public final static String SHIPDATE_INTERVAL = "SHIPDATE_INTERVAL";
 	
