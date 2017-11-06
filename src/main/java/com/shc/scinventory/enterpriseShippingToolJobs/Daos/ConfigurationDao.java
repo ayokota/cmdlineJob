@@ -62,6 +62,7 @@ public class ConfigurationDao {
             configurations =
                     jdbcTemplate.query(selectAll, new BeanPropertyRowMapper(ConfigurationBean.class));
         } catch (Exception e) {
+        	e.printStackTrace();
             LOG.error("An error has occured in getAllConfigs method with error msg: " + e.getMessage(), e);
         }
         return configurations;

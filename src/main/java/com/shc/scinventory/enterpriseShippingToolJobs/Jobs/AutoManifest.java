@@ -60,6 +60,32 @@ public class AutoManifest {
 		}
 	}
 
+	private void auditAndLogError(String unit_id, String msg) {
+		String errorMsg = "Error during manifest: " + msg;
+		AuditBean auditBean = new AuditBean();
+		auditBean.setDcUnitId(unit_id);
+		auditBean.setEventType("Exception");
+		auditBean.setWorkFlow("Auto Manifest");
+		auditBean.setUserId("JBoss");
+		auditBean.setMsg(errorMsg);
+		LOG.error(errorMsg);
+		auditDaoImpl.insertInstance(auditBean);
+
+	}
+	
+	private void auditAndLogZeroPackage(String unit_id) {
+		String msg = "Zero packages manifested.";
+		AuditBean auditBean = new AuditBean();
+		auditBean.setDcUnitId(unit_id);
+		auditBean.setEventType("Batch");
+		auditBean.setWorkFlow("Auto Manifest");
+		auditBean.setUserId("JBoss");
+		auditBean.setMsg(msg);
+		LOG.error(msg);
+		auditDaoImpl.insertInstance(auditBean);
+
+	}
+	
 	private void manifest(String unit_id) {
 		try {
 			
@@ -78,8 +104,14 @@ public class AutoManifest {
 
 			ManifestResponse manifestResponse = JSONSerializer.deserialize(response, ManifestResponse.class);
 			
-			if(!manifestResponse.getResponseHeader().getReturnCode().equals("0"))
+			if(!manifestResponse.getResponseHeader().getReturnCode().equals("0") && !manifestResponse.getResponseHeader().getReturnCode().equals("4")) {
+				auditAndLogError(unit_id, manifestResponse.getResponseHeader().getErrorMessage());
 				return;
+			} else if (manifestResponse.getResponseHeader().getReturnCode().equals("4")) {
+				auditAndLogZeroPackage(unit_id);
+			}
+			
+			
 			
 			List<String> trackingNums = new LinkedList<String> ();
 			for(ProcessedPackageResult result: manifestResponse.getProcessedPackagesResponseBody().getResults()) {
@@ -87,17 +119,22 @@ public class AutoManifest {
 					trackingNums.add(packageInfo.getTrackingNum());
 				}
 			}
-			MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
-
-			AuditBean auditBean = new AuditBean();
-			auditBean.setDcUnitId(unit_id);
-			auditBean.setEventType("Batch");
-			auditBean.setWorkFlow("Auto Manifest");
-			auditBean.setUserId("JBoss");
-			auditBean.setMsg("Auto Manifest triggered. Number of packages: " + trackingNums.size());
-			
-			auditDaoImpl.insertInstance(auditBean);
-			
+			if(trackingNums.size()>0) {
+				if(unit_id.length()==4) {
+					MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
+				}
+	
+				AuditBean auditBean = new AuditBean();
+				auditBean.setDcUnitId(unit_id);
+				auditBean.setEventType("Batch");
+				auditBean.setWorkFlow("Auto Manifest");
+				auditBean.setUserId("JBoss");
+				auditBean.setMsg("Auto Manifest triggered. Number of packages: " + trackingNums.size());
+				
+				auditDaoImpl.insertInstance(auditBean);
+			} else {
+				auditAndLogZeroPackage(unit_id);
+			}
 		} catch (Exception e) {
 			LOG.error("Error processing auto manifest for dc: " + unit_id + " with error: " + e.getMessage());
 

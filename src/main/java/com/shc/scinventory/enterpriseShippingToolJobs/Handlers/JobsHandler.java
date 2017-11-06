@@ -10,6 +10,7 @@ import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AdHocUploadJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoManifest;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DBcheck;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DcUnitInfoJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.RefreshNextShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UpdatePickupTimeJob;
@@ -52,6 +53,9 @@ public class JobsHandler {
 	@Autowired
 	AutoManifest autoManifest;
 	
+	@Autowired
+	DBcheck dBcheck;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -86,7 +90,12 @@ public class JobsHandler {
 		}		
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.AUTO_MANIFEST) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.AUTO_MANIFEST_NUM)){
 			autoManifest.run();
-		}else {
+		} 
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase("11")){
+			dBcheck.run();
+		}
+		
+		else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");
 		}
 		//autoShipDateJob.run();
