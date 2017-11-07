@@ -105,7 +105,7 @@ public class AutoManifest {
 			ManifestResponse manifestResponse = JSONSerializer.deserialize(response, ManifestResponse.class);
 			
 			if(!manifestResponse.getResponseHeader().getReturnCode().equals("0") && !manifestResponse.getResponseHeader().getReturnCode().equals("4")) {
-				auditAndLogError(unit_id, manifestResponse.getResponseHeader().getErrorMessage());
+				auditAndLogError(unit_id, "Error occurred while processing manifest: " + manifestResponse.getResponseHeader().getErrorMessage());
 				return;
 			} else if (manifestResponse.getResponseHeader().getReturnCode().equals("4")) {
 				auditAndLogZeroPackage(unit_id);
@@ -137,7 +137,7 @@ public class AutoManifest {
 			}
 		} catch (Exception e) {
 			LOG.error("Error processing auto manifest for dc: " + unit_id + " with error: " + e.getMessage());
-
+			auditAndLogError(unit_id, "Error occurred while processing manifest: " + e.getMessage());
 		}
 	}
 	
