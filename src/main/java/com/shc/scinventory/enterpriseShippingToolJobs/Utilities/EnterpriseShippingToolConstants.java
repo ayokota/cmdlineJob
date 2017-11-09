@@ -40,5 +40,7 @@ public class EnterpriseShippingToolConstants {
 	public final static String SEARS = "sears";
 	public final static String KMART = "kmart";
 
+	public final static String MPU_UPDATE_SUCCESS = "kmart";
+
 
 }

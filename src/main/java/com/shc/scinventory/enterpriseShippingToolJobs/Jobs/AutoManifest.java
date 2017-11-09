@@ -1,6 +1,7 @@
 package com.shc.scinventory.enterpriseShippingToolJobs.Jobs;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.AuditBean;
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.UnitInfoBean;
+import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.MPU.MPUKmartShippedUpdateRequest;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.ManifestResponse;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.PackageInfo;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.ProcessedPackageResult;
+import com.shc.scinventory.enterpriseShippingToolJobs.Clients.OrderRetrievalClient;
 import com.shc.scinventory.enterpriseShippingToolJobs.Clients.ShipipngServiceClient;
 import com.shc.scinventory.enterpriseShippingToolJobs.Clients.ShippingToolClient;
 import com.shc.scinventory.enterpriseShippingToolJobs.Daos.AuditDao;
@@ -46,6 +49,9 @@ public class AutoManifest {
     
     @Autowired
     AuditDaoImpl auditDaoImpl;
+    
+    @Autowired
+    OrderRetrievalClient orderRetrievalClient;
     
 	public void run() {
 		System.out.println("AutoManifest job processor");
@@ -121,7 +127,8 @@ public class AutoManifest {
 			}
 			if(trackingNums.size()>0) {
 				if(unit_id.length()==4) {
-					MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
+					//MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
+					processKmartUpdate(unit_id, trackingNums);
 				}
 	
 				AuditBean auditBean = new AuditBean();
@@ -141,58 +148,35 @@ public class AutoManifest {
 		}
 	}
 	
-	/*
-	 * String today = EnterpriseShippingToolUtil.getTodaysDate();
-		
-		//find a list of DC that's has order processed
-		//select locn_nbr from package_info where shipped_date = '2017-10-26' and is_adhoc=0 and length(locn_nbr)=4 group by locn_nbr;
-		List<String> dcList = packageInfoDao.getDcsThatProcessedOrdersWithDate(today);
-		
-		//check if this list has manifested
-		//select dcUnitId AS most_recent_manifest, time from audit where LENGTH(dcUnitId) = 4 and workFlow ='Manifest' and time > '2017-10-26' group by dcUnitId;
-		List<String> manifestedDcList = auditDao.getDcsThatManifestedWithDate(today);
+	public void processKmartUpdate (String unit_id, List<String> trackingNums) {
+		try {
+			MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
+            List<String> subOrderIds = packageInfoDao.getSubOrderIdForTrackingNumbers(trackingNums);
+            MANIFEST_LOGGER.error("Update For Kmart:  " + unit_id
+                    + "\n with SubOrdIds:  " + JSONSerializer.serialize(subOrderIds));
+			
+            
+            List<String> storeSubOrderIds = new LinkedList<String>();
 
-		dcList.removeAll(manifestedDcList);
-		
-		//for each of these unmanifested DC
-		for(String dc : dcList) {
-			try {
-				LOG.error("Processing manifest for : " + dc);
-	
-				Map<String, String> manifestRequest = new HashMap<String, String> ();
-				manifestRequest.put("shipperCode", EnterpriseShippingToolUtil.getShipperCode(dc));
-				
-				//manifest and get a list of tracking
-				String response = shipipngServiceClient.postAPI(JSONSerializer.serialize(manifestRequest), 
-						EnterpriseShippingToolConstants.MANIFEST_API);
-							
-				ManifestResponse manifestResponse = JSONSerializer.deserialize(response, ManifestResponse.class);
-				List<String> trackingNums = new LinkedList<String> ();
-				try {
-					for(ProcessedPackageResult result: manifestResponse.getProcessedPackagesResponseBody().getResults()) {
-						for(PackageInfo packageInfo : result.getPackageInfo()) {
-							trackingNums.add(packageInfo.getTrackingNum());
-						}
-					}
-				} catch (Exception e) {
-					LOG.error("Error parsing manifest response for dc: " + dc + " with error: " + e.getMessage());
-				}
-								
-				if(trackingNums.size()>0) {
-					EST_updateKmartToShippedRequest updateKmartReq = new EST_updateKmartToShippedRequest(dc, "batchJob", trackingNums);
-						
-					
-					//call EST API to get the rest done
-					String estResponse = shippingToolClient.postAPICall(JSONSerializer.serialize(updateKmartReq), "updateKmartToShipped");
-					
-					LOG.error("Response for updating status for " + dc + " is " + estResponse );
-				} else {
-					LOG.error("No package to update for dc: " + dc);
-				}
-			} catch (Exception e) {
-				LOG.error("Error processing auto manifest for dc: " + dc + " with error: " + e.getMessage());
-			}
+            if(subOrderIds!=null && subOrderIds.size()>0) {
+                for(String suborderId : new HashSet<String>(subOrderIds)) {
+                    if(!suborderId.startsWith("a") && !suborderId.startsWith("c")) {
+                        storeSubOrderIds.add(suborderId);
+                    }
+                }
+                if(!storeSubOrderIds.isEmpty()) {
+
+                    MPUKmartShippedUpdateRequest mpuKmartShippedUpdateRequest = new MPUKmartShippedUpdateRequest();
+                    mpuKmartShippedUpdateRequest.setStoreNumber(unit_id);
+                    mpuKmartShippedUpdateRequest.setAssociateId("9999");
+                    mpuKmartShippedUpdateRequest.setOrders(storeSubOrderIds);
+                    orderRetrievalClient.updateKmartOrdersToShipped(mpuKmartShippedUpdateRequest);
+                }
+            }
+		} catch (Exception e) {
+			MANIFEST_LOGGER.error("Error updating status for " + unit_id 
+					+ " for pkgs: " + JSONSerializer.serialize(trackingNums));
 		}
-	 */
-
+	}
+	
 }

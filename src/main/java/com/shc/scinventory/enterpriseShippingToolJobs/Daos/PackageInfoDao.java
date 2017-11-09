@@ -71,4 +71,35 @@ public class PackageInfoDao {
             }
         });
     }
+    
+    private String getTrackingNums(List<String> trackingNumbers) {
+        StringBuilder trackingNums = new StringBuilder();
+
+        if(trackingNumbers!=null && trackingNumbers.size()>0) {
+            for(String trackingNum : trackingNumbers) {
+                trackingNums.append("'").append(trackingNum).append("',");
+            }
+            if(trackingNums.length()>0) {
+                trackingNums.setLength(trackingNums.length()-1);
+            }
+        }
+        return trackingNums.toString();
+    }
+    
+    private final String getSubOrderIdWithTrackingQuery =
+            "select suborderid from package_info where tracking_no in (?)";
+    
+    public List<String> getSubOrderIdForTrackingNumbers(List<String> trackingNumbers) {
+        List<String> subOrderIds = null;
+
+        try {
+            String trackingNums = getTrackingNums (trackingNumbers);
+            String query = getSubOrderIdWithTrackingQuery.replace("?", trackingNums);
+            subOrderIds =
+                    jdbcTemplate.queryForList (query, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subOrderIds;
+    }
 }
