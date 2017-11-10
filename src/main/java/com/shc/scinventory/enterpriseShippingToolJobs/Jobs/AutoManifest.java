@@ -115,6 +115,7 @@ public class AutoManifest {
 				return;
 			} else if (manifestResponse.getResponseHeader().getReturnCode().equals("4")) {
 				auditAndLogZeroPackage(unit_id);
+				return;
 			}
 			
 			
