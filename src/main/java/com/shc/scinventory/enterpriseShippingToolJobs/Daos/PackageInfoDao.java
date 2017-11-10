@@ -87,7 +87,7 @@ public class PackageInfoDao {
     }
     
     private final String getSubOrderIdWithTrackingQuery =
-            "select suborderid from package_info where tracking_no in (?)";
+            "select suborderid from package_info where tracking_no in (?) and is_adhoc=0";
     
     public List<String> getSubOrderIdForTrackingNumbers(List<String> trackingNumbers) {
         List<String> subOrderIds = null;
