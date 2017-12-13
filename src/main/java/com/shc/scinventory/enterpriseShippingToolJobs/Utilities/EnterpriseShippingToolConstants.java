@@ -49,8 +49,12 @@ public class EnterpriseShippingToolConstants {
 
 	public final static String MPU_UPDATE_SUCCESS = "SUCCESS";
 
+	public final static Integer STATUS_UPDATE_CODE_DEFAULT = 1;
+	public final static Integer STATUS_UPDATE_CODE_ORDER_PROCESSED = 2;
+	public final static Integer STATUS_UPDATE_CODE_PENDING_SHIPPER_FAILED = 3;
 	public final static Integer STATUS_UPDATE_CODE_SHIPPED_UPDATE_FAILED = 4;
 	public final static Integer STATUS_UPDATE_CODE_SHIPPED_AND_MANIFESTED = 5;
+	public final static Integer STATUS_UPDATE_CODE_ADHOC = 6;
 	
 
 }

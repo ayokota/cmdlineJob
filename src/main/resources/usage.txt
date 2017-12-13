@@ -21,7 +21,7 @@ Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/kmart.csv -s kmart
 
 
 //auto manifest 
-Java -jar EnterpriseShippingToolJobs.jar -j 10 -f history/kmart.csv -s kmart
+Java -jar EnterpriseShippingToolJobs.jar -j 10 
 
 //pending shipper update
 Java -jar EnterpriseShippingToolJobs.jar -j 14 -f faq/faq.txt
