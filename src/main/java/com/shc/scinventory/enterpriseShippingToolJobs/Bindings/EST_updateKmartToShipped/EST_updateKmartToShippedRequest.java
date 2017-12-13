@@ -1,21 +1,27 @@
 package com.shc.scinventory.enterpriseShippingToolJobs.Bindings.EST_updateKmartToShipped;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class EST_updateKmartToShippedRequest {
     
     private String storeNumber;
     private String associateId;
-    private List<String>  trackingList;
+    private List<String>  orders;
+    
+    public EST_updateKmartToShippedRequest () {
+    	orders = new LinkedList<String>();
+    }
+
     
     public EST_updateKmartToShippedRequest (
     		String storeNumber,
     		String associateId,
-    		List<String>  trackingList
+    		List<String>  orders
     		) {
     	this.storeNumber = storeNumber;
     	this.associateId = associateId;
-    	this.trackingList = trackingList;
+    	this.orders = orders;
     }
     
 	public String getStoreNumber() {
@@ -30,11 +36,16 @@ public class EST_updateKmartToShippedRequest {
 	public void setAssociateId(String associateId) {
 		this.associateId = associateId;
 	}
-	public List<String> getTrackingList() {
-		return trackingList;
+
+
+	public List<String> getOrders() {
+		return orders;
 	}
-	public void setTrackingList(List<String> trackingList) {
-		this.trackingList = trackingList;
+
+
+	public void setOrders(List<String> orders) {
+		this.orders = orders;
 	}
+
     
 }

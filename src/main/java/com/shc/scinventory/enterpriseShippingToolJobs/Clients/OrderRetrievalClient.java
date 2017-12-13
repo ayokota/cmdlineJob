@@ -17,6 +17,9 @@ public class OrderRetrievalClient {
 	
     @Value("${KMART_SHIPPED_UPDATE_URL}")
     private String kmart_shipped_update_url;
+    
+    @Value("${KMART_PENDING_UPDATE_URL}")
+    private String kmart_pending_update_url;
 
     private Integer connectionTimeout = 60000;
     private Integer readTimeout = 60000;
@@ -62,6 +65,7 @@ public class OrderRetrievalClient {
                     + "\nresp: " + itemResponse);
             
             response = itemResponse;
+            System.out.println(itemResponse);
 
         } catch (Exception e) {
             LOG.error("An error has occured while calling update API for kmart " +
@@ -72,6 +76,51 @@ public class OrderRetrievalClient {
                     "\nstore: " + mpuKmartShippedUpdateRequest.getStoreNumber() +
                     "\nrequest: " + JSONSerializer.serialize(mpuKmartShippedUpdateRequest) +
                     "\nwith msg: " + e.getMessage());
+            response = e.getMessage();
+
+        }
+
+        return response;
+    }
+    
+    public String buildKmartUpdateUrl(String dcUnitId) {
+        if (dcUnitId == null || dcUnitId.isEmpty()) {
+            return null;
+        }
+        StringBuilder queryUrl = new StringBuilder();
+        queryUrl.append(kmart_pending_update_url).append(dcUnitId);
+        return queryUrl.toString();
+    }
+    
+    public String updateKmartOrders(String request, String storeNumber) {
+        String response = "";
+        try {
+            String updateUrl = buildKmartUpdateUrl(storeNumber);
+
+            LOG.debug("Update kmart order url:  " + updateUrl);
+            LOG.debug("Update kmart order request:  " + request);
+
+            WebResource resource = getWebResource(updateUrl);
+            String itemResponse = resource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(String.class, request);
+
+            System.out.println(itemResponse);
+            LOG.debug("Update kmart order response:  " + itemResponse);
+
+//            updateLOG.error("Store:  " + storeNumber
+//                    + "\nreq: " + request
+//                    + "\nresp: " + itemResponse);
+//
+//            OrderItemUpdateResponse orderItemUpdateResponse = JSONSerializer.deserialize(itemResponse, OrderItemUpdateResponse.class);
+//            response = orderItemUpdateResponse.getResponseDesc();
+        } catch (Exception e) {
+        	e.printStackTrace();
+            LOG.error("An error has occured while calling update API for kmart " +
+                    "\nstore: " + storeNumber +
+                    "\nrequest: " + request +
+                    "\nwith msg: " + e.getMessage());
+//            updateLOG.error("Store::  " + storeNumber
+//                    + "\nreq: " + request
+//                    + "\nresp: Exception 500"  );
             response = e.getMessage();
 
         }

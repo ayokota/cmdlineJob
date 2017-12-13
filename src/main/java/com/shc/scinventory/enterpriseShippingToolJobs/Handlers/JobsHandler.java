@@ -12,8 +12,11 @@ import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.AutoShipDateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.BoxAssortmentAlertJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DBcheck;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.DcUnitInfoJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.PendingShipperCleanupJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.RefreshNextShipDateJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.StatusUpdateJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UpdatePickupTimeJob;
+import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UploadFaqJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UploadHistoryJob;
 import com.shc.scinventory.enterpriseShippingToolJobs.Jobs.UploadHistoryJobV2;
 import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolConstants;
@@ -56,6 +59,15 @@ public class JobsHandler {
 	@Autowired
 	DBcheck dBcheck;
 	
+	@Autowired
+	StatusUpdateJob statusUpdateJob;
+	
+	@Autowired
+	PendingShipperCleanupJob pendingShipperCleanupJob;
+	
+	@Autowired
+	UploadFaqJob uploadFaqJob;
+	
 	public void test () {
 		System.out.println(bosUrl);
 	}
@@ -94,7 +106,15 @@ public class JobsHandler {
 		else if(mainCommandLineParser.getJob().equalsIgnoreCase("11")){
 			dBcheck.run();
 		}
-		
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase("12")){
+			statusUpdateJob.run();
+		}
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase("13")){
+			pendingShipperCleanupJob.run();
+		}
+		else if(mainCommandLineParser.getJob().equalsIgnoreCase(EnterpriseShippingToolConstants.UPLOAD_FAQ) || mainCommandLineParser.getJob().equals(EnterpriseShippingToolConstants.UPLOAD_FAQ_NUM)){
+			uploadFaqJob.run(mainCommandLineParser.getFile());
+		}
 		else {
 			System.out.println(mainCommandLineParser.getJob() + " is not found ");
 		}

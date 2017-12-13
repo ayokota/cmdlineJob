@@ -1,5 +1,6 @@
 package com.shc.scinventory.enterpriseShippingToolJobs.Bindings.MPU;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MPUKmartShippedUpdateRequest {
@@ -7,6 +8,10 @@ public class MPUKmartShippedUpdateRequest {
     private String  associateId;
     private List<String> orders;
 
+    public MPUKmartShippedUpdateRequest () {
+    	orders = new LinkedList<String>();
+    }
+    
     public String getStoreNumber() {
         return storeNumber;
     }

@@ -17,3 +17,11 @@ Java -jar EnterpriseShippingToolJobs.jar -j 6
 //upload history for dc units
 Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s sears
 Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/kmart.csv -s kmart
+
+
+
+//auto manifest 
+Java -jar EnterpriseShippingToolJobs.jar -j 10 -f history/kmart.csv -s kmart
+
+//pending shipper update
+Java -jar EnterpriseShippingToolJobs.jar -j 14 -f faq/faq.txt

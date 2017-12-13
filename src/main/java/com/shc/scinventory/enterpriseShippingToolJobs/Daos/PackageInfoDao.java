@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.PackageInfoBean;
+import com.shc.scinventory.enterpriseShippingToolJobs.Exception.ShippingToolException;
+import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.EnterpriseShippingToolConstants;
+import com.shc.scinventory.enterpriseShippingToolJobs.Utilities.ListUtils;
 
 @Component
 public class PackageInfoDao {
@@ -101,5 +104,59 @@ public class PackageInfoDao {
             e.printStackTrace();
         }
         return subOrderIds;
+    }
+    
+    private final String getSubOrderIdWithMsnQuery =
+            "select suborderid from package_info where msn in (?) and is_adhoc=0";
+
+    public List<String> getSubOrderIdWithMsn(List<Integer> msn) {
+        List<String> subOrderIds = null;
+
+        try {
+            String query = getSubOrderIdWithMsnQuery.replace("?", ListUtils.concatIntegersForUpdate(msn));
+            LOG.debug(query);
+            subOrderIds =
+                    jdbcTemplate.queryForList (query, String.class);
+        } catch (Exception e) {
+            throw new ShippingToolException
+                    ("An error has occured in updateStatusToShippedAndManifested method with error msg: "
+                            + e.getMessage());
+        }
+        return subOrderIds;
+    }
+    
+    private final static String updateShippedWithMsn = "update package_info set update_status_id="
+            + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_SHIPPED_AND_MANIFESTED
+            + " where msn in (?)";
+
+    public void updateStatusToShippedAndManifested(List<Integer> msns) {
+        try {
+            String query = updateShippedWithMsn.replace("?", ListUtils.concatIntegersForUpdate(msns));
+            LOG.debug(query);
+
+            jdbcTemplate.execute(query);
+        } catch (Exception e) {
+            throw new ShippingToolException
+                    ("An error has occured in updateStatusToShippedAndManifested method with error msg: "
+                            + e.getMessage());
+        }
+    }
+    
+
+    private final static String updateFailedShippedWithMsn = "update package_info set update_status_id="
+            + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_SHIPPED_UPDATE_FAILED
+            + " where msn in (?)";
+
+    public void updateStatusToFailedShipped(List<Integer> msns) {
+        try {
+            String query = updateFailedShippedWithMsn.replace("?", ListUtils.concatIntegersForUpdate(msns));
+            LOG.debug(query);
+
+            jdbcTemplate.execute(query);
+        } catch (Exception e) {
+            throw new ShippingToolException
+                    ("An error has occured in updateStatusToFailedShipped method with error msg: "
+                            + e.getMessage());
+        }
     }
 }

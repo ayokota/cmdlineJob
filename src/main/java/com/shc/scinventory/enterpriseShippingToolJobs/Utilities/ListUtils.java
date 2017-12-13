@@ -58,5 +58,19 @@ public class ListUtils {
 
         return result;
     }
+    
+    public static String concatIntegersForUpdate (List<Integer> ints) {
+        if(ints==null || ints.size() < 1) {
+            return "";
+        }
+        StringBuilder response = new StringBuilder();
+
+        for(Integer i : ints) {
+            response.append(i).append(',');
+        }
+        response.setLength(response.length()-1);
+
+        return response.toString();
+    }
 
 }

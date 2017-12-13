@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.AuditBean;
 import com.shc.scinventory.enterpriseShippingToolJobs.Beans.UnitInfoBean;
+import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.EST_updateKmartToShipped.OrderItemUpdateResponse;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.MPU.MPUKmartShippedUpdateRequest;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.ManifestResponse;
 import com.shc.scinventory.enterpriseShippingToolJobs.Bindings.Manifest.PackageInfo;
@@ -120,24 +121,34 @@ public class AutoManifest {
 			
 			
 			
-			List<String> trackingNums = new LinkedList<String> ();
+			List<Integer> msns = new LinkedList<Integer> ();
 			for(ProcessedPackageResult result: manifestResponse.getProcessedPackagesResponseBody().getResults()) {
 				for(PackageInfo packageInfo : result.getPackageInfo()) {
-					trackingNums.add(packageInfo.getTrackingNum());
-				}
+                    if (!packageInfo.getVoided()) {
+                        msns.add(packageInfo.getMsn());
+                    }				
+                }
 			}
-			if(trackingNums.size()>0) {
+			if(msns.size()>0) {
 				if(unit_id.length()==4) {
 					//MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
-					processKmartUpdate(unit_id, trackingNums);
+					if(processKmartUpdate(unit_id, msns).equals(EnterpriseShippingToolConstants.MPU_UPDATE_SUCCESS)) {
+						//kmart update package info status here
+                        packageInfoDao.updateStatusToShippedAndManifested(msns);
+					} else {
+                        packageInfoDao.updateStatusToFailedShipped(msns);
+                    }
+				} else {
+					//sears update package info status here
+                    packageInfoDao.updateStatusToShippedAndManifested(msns);
 				}
-	
+				
 				AuditBean auditBean = new AuditBean();
 				auditBean.setDcUnitId(unit_id);
 				auditBean.setEventType("Batch");
 				auditBean.setWorkFlow("Auto Manifest");
 				auditBean.setUserId("JBoss");
-				auditBean.setMsg("Auto Manifest triggered. Number of packages: " + trackingNums.size());
+				auditBean.setMsg("Auto Manifest triggered. Number of packages: " + msns.size());
 				
 				auditDaoImpl.insertInstance(auditBean);
 			} else {
@@ -149,10 +160,11 @@ public class AutoManifest {
 		}
 	}
 	
-	public void processKmartUpdate (String unit_id, List<String> trackingNums) {
+	public String processKmartUpdate (String unit_id, List<Integer> msns) {
+		String status = "FAIL";
 		try {
-			MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(trackingNums));
-            List<String> subOrderIds = packageInfoDao.getSubOrderIdForTrackingNumbers(trackingNums);
+			MANIFEST_LOGGER.error(unit_id + " has closed out: " + JSONSerializer.serialize(msns));
+            List<String> subOrderIds = packageInfoDao.getSubOrderIdWithMsn(msns);
             MANIFEST_LOGGER.error("Update For Kmart:  " + unit_id
                     + "\n with SubOrdIds:  " + JSONSerializer.serialize(subOrderIds));
 			
@@ -171,13 +183,18 @@ public class AutoManifest {
                     mpuKmartShippedUpdateRequest.setStoreNumber(unit_id);
                     mpuKmartShippedUpdateRequest.setAssociateId("9999");
                     mpuKmartShippedUpdateRequest.setOrders(storeSubOrderIds);
-                    orderRetrievalClient.updateKmartOrdersToShipped(mpuKmartShippedUpdateRequest);
+                    OrderItemUpdateResponse orderItemUpdateResponse
+	                    = JSONSerializer.deserialize(
+	                    orderRetrievalClient.updateKmartOrdersToShipped(mpuKmartShippedUpdateRequest),
+	                    OrderItemUpdateResponse.class);
+                    status = orderItemUpdateResponse.getResponseDesc();
                 }
             }
 		} catch (Exception e) {
 			MANIFEST_LOGGER.error("Error updating status for " + unit_id 
-					+ " for pkgs: " + JSONSerializer.serialize(trackingNums));
+					+ " for pkgs: " + JSONSerializer.serialize(msns));
 		}
+		return status;
 	}
 	
 }

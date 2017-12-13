@@ -92,4 +92,9 @@ public class EnterpriseShippingToolUtil {
     	}
     	return dcUnits;
     }
+    
+    public static Integer setBit(Integer value, Integer position) {
+    	return value | (1 << position);
+    }
+
 }
