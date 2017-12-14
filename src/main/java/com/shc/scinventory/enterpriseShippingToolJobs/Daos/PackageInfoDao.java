@@ -107,7 +107,8 @@ public class PackageInfoDao {
     }
     
     private final String getSubOrderIdWithMsnQuery =
-            "select suborderid from package_info where msn in (?) and is_adhoc=0";
+            "select suborderid from package_info where msn in (?) and is_adhoc=0" +
+                    " and update_status_id = " + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_ORDER_PROCESSED;
 
     public List<String> getSubOrderIdWithMsn(List<Integer> msn) {
         List<String> subOrderIds = null;
@@ -127,7 +128,7 @@ public class PackageInfoDao {
     
     private final static String updateShippedWithMsn = "update package_info set update_status_id="
             + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_SHIPPED_AND_MANIFESTED
-            + " where msn in (?)";
+            + " where msn in (?) and update_status_id = " + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_ORDER_PROCESSED;
 
     public void updateStatusToShippedAndManifested(List<Integer> msns) {
         try {
@@ -145,7 +146,7 @@ public class PackageInfoDao {
 
     private final static String updateFailedShippedWithMsn = "update package_info set update_status_id="
             + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_SHIPPED_UPDATE_FAILED
-            + " where msn in (?)";
+            + " where msn in (?) and update_status_id = " + EnterpriseShippingToolConstants.STATUS_UPDATE_CODE_ORDER_PROCESSED;
 
     public void updateStatusToFailedShipped(List<Integer> msns) {
         try {
