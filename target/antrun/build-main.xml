@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <echo>copy application.qa.properties</echo>
+  <delete file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/log4j.properties"/>
+  <copy file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/src/main/resources/qa/log4j.properties" tofile="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/log4j.properties"/>
+  <delete file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/cassandra.properties"/>
+  <copy file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/src/main/resources/qa/cassandra.properties" tofile="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/cassandra.properties"/>
+  <delete file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/mysql.properties"/>
+  <copy file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/src/main/resources/qa/mysql.properties" tofile="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/mysql.properties"/>
+  <delete file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/shippingTool.properties"/>
+  <copy file="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/src/main/resources/qa/shippingTool.properties" tofile="/Users/ayokota/Documents/Searshc/SHC Dev/SourceCodes/EnterpriseShippingToolJobs/enterpriseShippingToolJobs/target/classes/shippingTool.properties"/>
+</target>
+</project>

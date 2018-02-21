@@ -1,0 +1,27 @@
+//update new stores's update ship date   [needed for initialization]
+Java -jar EnterpriseShippingToolJobs.jar -j 1 -f pickupTime.txt
+
+
+//update ship date for DC units
+Java -jar EnterpriseShippingToolJobs.jar -j 3
+
+//update pick up time for all units.   [needed for initialization]
+Java -jar EnterpriseShippingToolJobs.jar -j 4 -f pickupTime.txt
+
+//send box alert email
+Java -jar EnterpriseShippingToolJobs.jar -j 5
+
+//upload adhoc shipping address book. file name is hard coded
+Java -jar EnterpriseShippingToolJobs.jar -j 6
+
+//upload history for dc units
+Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/sears.csv -s sears
+Java -jar EnterpriseShippingToolJobs.jar -j 7 -f history/kmart.csv -s kmart
+
+
+
+//auto manifest 
+Java -jar EnterpriseShippingToolJobs.jar -j 10 
+
+//pending shipper update
+Java -jar EnterpriseShippingToolJobs.jar -j 14 -f faq/faq.txt

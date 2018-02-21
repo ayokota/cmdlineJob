@@ -1,0 +1,12 @@
+2017-11-09 16:43:58,038 [main] - 4433 has closed out: ["1Z0236Y50300002427","1Z0236Y50300002436"]
+2017-11-09 16:43:58,711 [main] - Update For Kmart:  4433
+ with SubOrdIds:  []
+2017-12-13 11:33:28,650 [main] - 4433 has closed out: [18785]
+2017-12-13 11:33:29,298 [main] - Update For Kmart:  4433
+ with SubOrdIds:  []
+2017-12-13 11:33:35,033 [main] - 0847 has closed out: [18842,18843,18852]
+2017-12-13 11:33:35,677 [main] - Update For Kmart:  0847
+ with SubOrdIds:  ["1410281860"]
+2017-12-13 11:33:36,793 [main] - url:  http://hfqasbosysjbos1.vm.itg.corp.us.shldcorp.com:8480/MPUWEBServices/router/shippingServices/updateOrderStatusShipped/0847
+req: {"storeNumber":"0847","associateId":"9999","orders":["1410281860"]}
+resp: {"responseCode":"200","responseDesc":"SUCCESS","responseBody":null}
